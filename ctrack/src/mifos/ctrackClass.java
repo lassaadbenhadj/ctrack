@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.sql.*;
 import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 public class ctrackClass {
 	public static Connection conn;
 	/**
@@ -23,8 +25,8 @@ public class ctrackClass {
 		index_ctrackcycle();
 		drop_ctrack();
 		enable_reports();
-		
 		logger(logfile,"Time Finish:" + new Date());
+		update_batch_last_run_date_table();
 	}
 
 	public static void openconnection() {
@@ -207,5 +209,23 @@ public class ctrackClass {
    
 			}      
   
-	}     
+	}    
+	
+	public static void update_batch_last_run_date_table() {
+		try {
+			DateFormat mysqldateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String formateddate=mysqldateFormat.format(new Date());
+			
+			Statement stmt = conn.createStatement();
+			
+			String SqlStr = "UPDATE batch_last_run_date set last_run_date='" + formateddate + "' WHERE batch_id=1";
+			stmt.executeUpdate(SqlStr);
+			System.out.println("Query update_batch_last_run_date_table executed with success");
+			
+			}
+			catch(Exception e){
+				System.err.println("ClassNotFoundException: "
+					      +e.getMessage());
+			}
+	}
 }
