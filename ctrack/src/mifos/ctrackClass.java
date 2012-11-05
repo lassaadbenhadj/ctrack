@@ -22,7 +22,8 @@ public class ctrackClass {
 		create_ctrackcycle();
 		index_ctrackcycle();
 		drop_ctrack();
-		endable_reports();
+		enable_reports();
+		
 		logger(logfile,"Time Finish:" + new Date());
 	}
 
@@ -174,13 +175,13 @@ public class ctrackClass {
 		
 	}
 	
-	public static void endable_reports() {
+	public static void enable_reports() {
 		try {
 			Statement stmt = conn.createStatement();
 			
 			String SqlStr = "UPDATE report set REPORT_ACTIVE=1 WHERE REPORT_ID IN (5,14,42,28,29,19,24,31,40)";
 			stmt.executeUpdate(SqlStr);
-			System.out.println("Query endable_reports executed with success");
+			System.out.println("Query enable_reports executed with success");
 			
 			}
 			catch(Exception e){
