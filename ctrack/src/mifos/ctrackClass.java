@@ -24,6 +24,8 @@ public class ctrackClass {
 		create_ctrackcycle();
 		index_ctrackcycle();
 		drop_ctrack();
+		update_business_activities_I();
+		update_business_activities_II();
 		enable_reports();
 		logger(logfile,"Time Finish:" + new Date());
 		update_batch_last_run_date_table();
@@ -219,6 +221,70 @@ public class ctrackClass {
 			String SqlStr = "UPDATE batch_last_run_date set last_run_date='" + formateddate + "' WHERE batch_id=1";
 			stmt.executeUpdate(SqlStr);
 			System.out.println("Query update_batch_last_run_date_table executed with success");
+			
+			}
+			catch(Exception e){
+				System.err.println("ClassNotFoundException: "
+					      +e.getMessage());
+			}
+	}
+	
+	public static void update_business_activities_I() {
+		try {
+			
+			Statement stmt = conn.createStatement();
+			
+			String SqlStr = "UPDATE ctrackcycle JOIN (SELECT  entity_id,tag AS 'Activity'," +
+				   " 1,customer_id" +
+				   " FROM question_group_instance join question_group_response" +
+				   " ON question_group_instance.id=question_group_response.question_group_instance_id" +
+				   " JOIN ctrackcycle ON ctrackcycle.account_id=question_group_instance.entity_id" +
+				   " Where question_group_id = 19" +
+				   " AND sections_questions_id = 286" +
+				   " GROUP BY entity_id" +
+				   " union" +
+				   " SELECT  entity_id,tag AS 'Activity'," +
+				   " 1,customer_id" +
+				   " FROM question_group_instance join question_group_response" +
+				   " ON question_group_instance.id=question_group_response.question_group_instance_id" +
+				   " JOIN ctrackcycle ON ctrackcycle.account_id=question_group_instance.entity_id" +
+				   " Where question_group_id = 20" +
+				   " AND sections_questions_id = 297" +
+				   " GROUP BY entity_id" +
+				   " union" +
+				   " SELECT  entity_id,tag AS 'Activity'," +
+				   " 1,customer_id" +
+				   " FROM question_group_instance join question_group_response" +
+				   " ON question_group_instance.id=question_group_response.question_group_instance_id" +
+				   " JOIN ctrackcycle ON ctrackcycle.account_id=question_group_instance.entity_id" +
+				   " Where question_group_id = 22" +
+				   " AND sections_questions_id = 317" +
+				   " GROUP BY entity_id) as Activ" +
+				   " on entity_id=account_id and Activ.customer_id=ctrackcycle.customer_id" +
+				   " join question_business_activities_sector on question_business_activities_sector.business_activity_name=Activ.Activity" +
+				   " SET ctrackcycle.business_activities_id=question_business_activities_sector.business_activity_id";
+			
+			stmt.executeUpdate(SqlStr);
+			System.out.println("Query update_business_activities executed with success");
+			
+			}
+			catch(Exception e){
+				System.err.println("ClassNotFoundException: "
+					      +e.getMessage());
+			}
+	}
+	
+	public static void update_business_activities_II() {
+		try {
+			
+			Statement stmt = conn.createStatement();
+			
+			String SqlStr = "update ctrackcycle JOIN prd_offering USING (PRD_OFFERING_ID)" +
+							" set business_activities_id=82" +
+							" where disbursement_date>='2012-05-01' AND PRD_CATEGORY_ID in (4,9)";
+			
+			stmt.executeUpdate(SqlStr);
+			System.out.println("Query update_business_activities_II executed with success");
 			
 			}
 			catch(Exception e){
