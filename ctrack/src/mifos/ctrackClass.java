@@ -83,7 +83,8 @@ public class ctrackClass {
 			" loan_account.ACCOUNT_ID as child_account_id , account.CUSTOMER_ID," +
 			" loan_account.BUSINESS_ACTIVITIES_ID, loan_account.DISBURSEMENT_DATE, " +
 			" loan_account.LOAN_AMOUNT, loan_account.NO_OF_INSTALLMENTS, ACCOUNT_TYPE_ID, CLOSED_DATE," +
-			" loan_account.prd_offering_id, ACCOUNT_STATE_ID, office_id, personnel_id " +
+			" loan_account.prd_offering_id, ACCOUNT_STATE_ID, office_id, personnel_id, " +
+			" loan_account.fund_id" +
 			" FROM (loan_account LEFT JOIN account ON loan_account.ACCOUNT_ID = account.ACCOUNT_ID) " +
 			" LEFT JOIN customer ON account.CUSTOMER_ID = customer.CUSTOMER_ID" +
 			" WHERE (((account.ACCOUNT_TYPE_ID) = 1) And ((customer.CUSTOMER_LEVEL_ID) = 1))" +
@@ -91,7 +92,8 @@ public class ctrackClass {
 			" account.CUSTOMER_ID, loan_account.BUSINESS_ACTIVITIES_ID, loan_account_1.DISBURSEMENT_DATE," +
 			" loan_account.LOAN_AMOUNT, loan_account_1.NO_OF_INSTALLMENTS, account.ACCOUNT_TYPE_ID," +
 			" account_parent.CLOSED_DATE , loan_account_1.prd_offering_id, account_parent.ACCOUNT_STATE_ID," +
-			" account_parent.OFFICE_ID, account_parent.personnel_id" +
+			" account_parent.OFFICE_ID, account_parent.personnel_id," +
+			" loan_account_1.fund_id" +
 			" FROM (loan_account LEFT JOIN account ON loan_account.ACCOUNT_ID = account.ACCOUNT_ID)" +
 			" LEFT JOIN loan_account AS loan_account_1 ON loan_account.PARENT_ACCOUNT_ID = loan_account_1.ACCOUNT_ID" +
 			" LEFT JOIN account as account_parent ON loan_account_1.ACCOUNT_ID = account_parent.ACCOUNT_ID" +
@@ -276,7 +278,7 @@ public class ctrackClass {
 	
 	public static void update_business_activities_II() {
 		try {
-			
+			/* add id for consumption activities*/
 			Statement stmt = conn.createStatement();
 			
 			String SqlStr = "update ctrackcycle JOIN prd_offering USING (PRD_OFFERING_ID)" +
